@@ -1,5 +1,6 @@
-
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class FirstPersonSpaceFlight : MonoBehaviour
 {
@@ -8,7 +9,13 @@ public class FirstPersonSpaceFlight : MonoBehaviour
     public float boostSpeed = 40f;
 
     [Header("Look")]
-    public float mouseSensitivity = 2f;
+    public float mouseSensitivity = 0.1f;
+    public float touchSensitivity = 0.15f;
+    public bool canLook = true;
+
+    [Header("Mobile (set by UI buttons)")]
+    public Vector2 mobileMove;      
+    public float mobileVertical;    
 
     private float pitch;
     private float yaw;
@@ -19,56 +26,123 @@ public class FirstPersonSpaceFlight : MonoBehaviour
         pitch = angles.x;
         yaw = angles.y;
 
-        LockCursor(true);
+        
+        LockCursor(!Application.isMobilePlatform);
     }
 
     void Update()
     {
-        // Unlock the mouse to interact with the editor or UI
-        if (Input.GetKeyDown(KeyCode.Escape))
+        Keyboard kb = Keyboard.current;
+        Mouse mouse = Mouse.current;
+
+        if (kb != null && kb.escapeKey.wasPressedThisFrame)
             LockCursor(false);
 
-        if (Input.GetMouseButtonDown(0) &&
+        if (mouse != null &&
+            mouse.leftButton.wasPressedThisFrame &&
             Cursor.lockState != CursorLockMode.Locked)
-            LockCursor(true);
-
-        // Look around
-        if (Cursor.lockState == CursorLockMode.Locked)
         {
-            yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
-            pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-            pitch = Mathf.Clamp(pitch, -89f, 89f);
+            bool overUI = EventSystem.current != null &&
+                          EventSystem.current.IsPointerOverGameObject();
+            if (!overUI && !Application.isMobilePlatform)
+                LockCursor(true);
+        }
 
+       
+        if (canLook)
+        {
+            Vector2 lookDelta = Vector2.zero;
+
+            if (mouse != null &&
+                (Cursor.lockState == CursorLockMode.Locked ||
+                 mouse.rightButton.isPressed))
+            {
+                lookDelta += mouse.delta.ReadValue() * mouseSensitivity;
+            }
+
+            
+            if (Touchscreen.current != null)
+            {
+                foreach (var touch in Touchscreen.current.touches)
+                {
+                    if (!touch.press.isPressed) continue;
+
+                    Vector2 pos = touch.position.ReadValue();
+                    int id = touch.touchId.ReadValue();
+
+                    bool overUI = EventSystem.current != null &&
+                                  EventSystem.current.IsPointerOverGameObject(id);
+
+                    if (!overUI && pos.x < Screen.width * 0.5f)
+                        lookDelta += touch.delta.ReadValue() * touchSensitivity;
+                }
+            }
+
+            yaw += lookDelta.x;
+            pitch -= lookDelta.y;
+            pitch = Mathf.Clamp(pitch, -89f, 89f);
             transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
         }
 
-        // Fly in the direction you're looking
-        float speed = Input.GetKey(KeyCode.LeftShift)
-            ? boostSpeed : flySpeed;
 
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        bool boost = kb != null &&
+                     (kb.leftShiftKey.isPressed || kb.rightShiftKey.isPressed);
+        float speed = boost ? boostSpeed : flySpeed;
 
-        Vector3 movement =
-            transform.right * horizontal +
-            transform.forward * vertical;
+        Vector3 movement = Vector3.zero;
 
-        // Space goes up; Ctrl goes down
-        if (Input.GetKey(KeyCode.Space))
-            movement += Vector3.up;
+        if (kb != null)
+        {
+            if (kb.wKey.isPressed) movement += transform.forward;
+            if (kb.sKey.isPressed) movement -= transform.forward;
+            if (kb.dKey.isPressed) movement += transform.right;
+            if (kb.aKey.isPressed) movement -= transform.right;
 
-        if (Input.GetKey(KeyCode.LeftControl))
-            movement += Vector3.down;
+            if (kb.spaceKey.isPressed) movement += Vector3.up;
+            if (kb.leftCtrlKey.isPressed || kb.rightCtrlKey.isPressed ||
+                kb.cKey.isPressed || kb.qKey.isPressed)
+                movement += Vector3.down;
+        }
+
+  
+        movement += transform.forward * mobileMove.y;
+        movement += transform.right * mobileMove.x;
+        movement += Vector3.up * mobileVertical;
 
         transform.position += movement * speed * Time.deltaTime;
     }
 
-    void LockCursor(bool locked)
-    {
-        Cursor.lockState = locked
-            ? CursorLockMode.Locked
-            : CursorLockMode.None;
+   
+    public void MoveForwardDown() { mobileMove.y = 1f; }
+    public void MoveBackDown() { mobileMove.y = -1f; }
+    public void MoveLeftDown() { mobileMove.x = -1f; }
+    public void MoveRightDown() { mobileMove.x = 1f; }
+    public void MoveStop() { mobileMove = Vector2.zero; }
+    public void UpDown() { mobileVertical = 1f; }
+    public void DownDown() { mobileVertical = -1f; }
+    public void VerticalStop() { mobileVertical = 0f; }
 
-        Cursor.visible = !locked;
+    public void LockCursor(bool locked)
+    {
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            canLook = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            canLook = Application.isMobilePlatform; // touch can always look
+        }
     }
+
+    public void SetCanLook(bool value)
+    {
+        canLook = value;
+        if (!value) Cursor.lockState = CursorLockMode.None;
+    }
+
+
 }

@@ -42,9 +42,7 @@ public class SpaceTimeGravityGrid : MonoBehaviour
         DeformGrid();
     }
 
-    // --------------------------------------------------
-    // CREATE GRID
-    // --------------------------------------------------
+    
 
     void CreateGrid()
     {
@@ -70,7 +68,7 @@ public class SpaceTimeGravityGrid : MonoBehaviour
 
         int vertexIndex = 0;
 
-        // Create vertices
+        
         for (int z = 0; z <= gridResolution; z++)
         {
             for (int x = 0; x <= gridResolution; x++)
@@ -96,7 +94,7 @@ public class SpaceTimeGravityGrid : MonoBehaviour
             }
         }
 
-        // Create triangles
+        
         int triangleIndex = 0;
 
         for (int z = 0; z < gridResolution; z++)
@@ -150,13 +148,11 @@ public class SpaceTimeGravityGrid : MonoBehaviour
         deformedVertices =
             new Vector3[originalVertices.Length];
 
-        // Give MeshCollider the same mesh
+        
         meshCollider.sharedMesh = mesh;
     }
 
-    // --------------------------------------------------
-    // DEFORM GRID
-    // --------------------------------------------------
+    
 
     void DeformGrid()
     {
@@ -203,22 +199,19 @@ public class SpaceTimeGravityGrid : MonoBehaviour
                 totalDeformation;
         }
 
-        // Update visual mesh
+        
         mesh.vertices =
             deformedVertices;
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        // IMPORTANT:
-        // Update the physics collider
+        
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
     }
 
-    // --------------------------------------------------
-    // GRAVITY
-    // --------------------------------------------------
+    
 
     float CalculateGravity(
         Vector3 vertex,

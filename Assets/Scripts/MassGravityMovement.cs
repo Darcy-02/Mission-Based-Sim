@@ -57,7 +57,7 @@ public class MassGravityMovement : MonoBehaviour
             gravitySource.position -
             transform.position;
 
-        // Gravity acts horizontally
+      
         direction.y = 0f;
 
         float distance = direction.magnitude;

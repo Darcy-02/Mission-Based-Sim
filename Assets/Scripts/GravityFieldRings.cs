@@ -46,9 +46,7 @@ public class GravityFieldRings : MonoBehaviour
     public float rayHeight = 20f;
     public float surfaceOffset = 0.08f;
 
-    // =========================================================
-    // LINE ARRAYS
-    // =========================================================
+    
 
     private LineRenderer[] rings1;
     private LineRenderer[] rings2;
@@ -56,9 +54,7 @@ public class GravityFieldRings : MonoBehaviour
     private LineRenderer[] radialLines1;
     private LineRenderer[] radialLines2;
 
-    // =========================================================
-    // START
-    // =========================================================
+    
 
     void Start()
     {
@@ -67,13 +63,11 @@ public class GravityFieldRings : MonoBehaviour
         ApplyFade();
     }
 
-    // =========================================================
-    // UPDATE
-    // =========================================================
+    
 
     void LateUpdate()
     {
-        // BIG MASS RINGS
+        
         UpdateRings(
             gravitySource1,
             rings1,
@@ -82,7 +76,7 @@ public class GravityFieldRings : MonoBehaviour
             bigRingSpacing
         );
 
-        // SMALL MASS RINGS
+        
         UpdateRings(
             gravitySource2,
             rings2,
@@ -91,7 +85,7 @@ public class GravityFieldRings : MonoBehaviour
             smallRingSpacing
         );
 
-        // BIG MASS RADIAL LINES
+        
         float bigMaximumRadius =
             bigFirstRadius +
             bigRingSpacing *
@@ -103,7 +97,7 @@ public class GravityFieldRings : MonoBehaviour
             bigMaximumRadius
         );
 
-        // SMALL MASS RADIAL LINES
+        
         float smallMaximumRadius =
             smallFirstRadius +
             smallRingSpacing *
@@ -116,9 +110,7 @@ public class GravityFieldRings : MonoBehaviour
         );
     }
 
-    // =========================================================
-    // CREATE RINGS
-    // =========================================================
+    
 
     void CreateRings()
     {
@@ -128,7 +120,7 @@ public class GravityFieldRings : MonoBehaviour
         rings2 =
             new LineRenderer[smallRingCount];
 
-        // BIG MASS RINGS
+       
         for (int i = 0; i < bigRingCount; i++)
         {
             rings1[i] =
@@ -137,7 +129,7 @@ public class GravityFieldRings : MonoBehaviour
                 );
         }
 
-        // SMALL MASS RINGS
+        
         for (int i = 0; i < smallRingCount; i++)
         {
             rings2[i] =
@@ -147,10 +139,7 @@ public class GravityFieldRings : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // CREATE ONE RING
-    // =========================================================
-
+    
     LineRenderer CreateRing(string lineName)
     {
         GameObject ringObject =
@@ -196,9 +185,7 @@ public class GravityFieldRings : MonoBehaviour
         return line;
     }
 
-    // =========================================================
-    // CREATE RADIAL LINES
-    // =========================================================
+    
 
     void CreateRadialLines()
     {
@@ -212,7 +199,7 @@ public class GravityFieldRings : MonoBehaviour
                 radialLineCount
             ];
 
-        // BIG MASS RADIAL LINES
+        
         for (int i = 0; i < radialLineCount; i++)
         {
             radialLines1[i] =
@@ -221,7 +208,7 @@ public class GravityFieldRings : MonoBehaviour
                 );
         }
 
-        // SMALL MASS RADIAL LINES
+        
         for (int i = 0; i < radialLineCount; i++)
         {
             radialLines2[i] =
@@ -231,9 +218,7 @@ public class GravityFieldRings : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // CREATE ONE RADIAL LINE
-    // =========================================================
+    
 
     LineRenderer CreateRadialLine(
         string lineName)
@@ -280,9 +265,7 @@ public class GravityFieldRings : MonoBehaviour
         return line;
     }
 
-    // =========================================================
-    // FADE
-    // =========================================================
+    
 
     void ApplyFade()
     {
@@ -340,9 +323,7 @@ public class GravityFieldRings : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // UPDATE RINGS
-    // =========================================================
+    
 
     void UpdateRings(
         Transform source,
@@ -404,9 +385,7 @@ public class GravityFieldRings : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // UPDATE RADIAL LINES
-    // =========================================================
+    
 
     void UpdateRadialLines(
         Transform source,
@@ -457,9 +436,7 @@ public class GravityFieldRings : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // GET CURVED SURFACE POINT
-    // =========================================================
+    
 
     Vector3 GetSurfacePoint(
         Transform source,
@@ -476,9 +453,7 @@ public class GravityFieldRings : MonoBehaviour
             Mathf.Sin(angle) *
             radius;
 
-        // Start HIGH above the spacetime surface.
-        // This lets the ray find the actual
-        // deformed MeshCollider.
+        
         Vector3 rayOrigin =
             new Vector3(
                 x,
@@ -494,15 +469,13 @@ public class GravityFieldRings : MonoBehaviour
             surfaceLayer,
             QueryTriggerInteraction.Ignore))
         {
-            // Attach the line directly to
-            // the actual curved surface.
+            
             return hit.point +
                    hit.normal *
                    surfaceOffset;
         }
 
-        // If the surface cannot be detected,
-        // keep the line at the grid object's height.
+        
         return new Vector3(
             x,
             transform.position.y,

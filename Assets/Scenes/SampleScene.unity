@@ -559,20 +559,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2cce51882f887428020e8a50fbeee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityFieldRings
-  gravitySource: {fileID: 791487868}
-  ringCount: 8
+  gravitySource1: {fileID: 0}
+  gravitySource2: {fileID: 0}
+  bigRingCount: 10
+  bigFirstRadius: 1
+  bigRingSpacing: 1.5
+  smallRingCount: 5
+  smallFirstRadius: 0.5
+  smallRingSpacing: 0.6
   pointsPerRing: 96
-  firstRadius: 1
-  ringSpacing: 1
   spacingPower: 2
-  lineWidth: 0.012
   lineColor: {r: 1, g: 0.028783847, b: 0, a: 1}
+  lineWidth: 0.012
   innerAlpha: 3
   outerAlpha: 1
   innerColor: {r: 1, g: 0, b: 0.009498596, a: 1}
   outerColor: {r: 0.8396226, g: 0.20990565, b: 0.24439375, a: 1}
   innerWidth: 0.025
   outerWidth: 0.006
+  radialLineCount: 32
+  pointsPerRadialLine: 80
+  radialLineWidth: 0.008
   surfaceLayer:
     serializedVersion: 2
     m_Bits: 64

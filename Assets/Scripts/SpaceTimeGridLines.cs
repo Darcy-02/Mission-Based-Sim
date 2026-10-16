@@ -183,9 +183,7 @@ public class SpaceTimeGridLines : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // RADIAL LINES
-    // =========================================================
+    
 
     void UpdateRadialLines()
     {
@@ -260,10 +258,7 @@ public class SpaceTimeGridLines : MonoBehaviour
         }
     }
 
-    // =========================================================
-    // KEEP GRID INSIDE THE SQUARE PLANE
-    // =========================================================
-
+    
     bool IsInsidePlane(
         float x,
         float z)
@@ -287,9 +282,7 @@ public class SpaceTimeGridLines : MonoBehaviour
             local.z <= half;
     }
 
-    // =========================================================
-    // GET CURVED SURFACE POSITION
-    // =========================================================
+    
 
     bool GetSurfacePoint(
         float x,
@@ -329,9 +322,7 @@ public class SpaceTimeGridLines : MonoBehaviour
         return false;
     }
 
-    // =========================================================
-    // APPLY CIRCULAR POINTS
-    // =========================================================
+    
 
     void ApplyCircularPoints(
         LineRenderer line,
@@ -364,9 +355,7 @@ public class SpaceTimeGridLines : MonoBehaviour
         );
     }
 
-    // =========================================================
-    // CLEAR
-    // =========================================================
+    
 
     void ClearLines()
     {

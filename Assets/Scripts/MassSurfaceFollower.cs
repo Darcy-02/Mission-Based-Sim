@@ -17,10 +17,10 @@ public class MassSurfaceFollower : MonoBehaviour
 
     void Start()
     {
-        // Remember the original height
+        
         startingY = transform.position.y;
 
-        // Automatically calculate the real sphere radius
+        
         SphereCollider sphere = GetComponent<SphereCollider>();
 
         if (sphere != null)
@@ -70,8 +70,7 @@ public class MassSurfaceFollower : MonoBehaviour
         }
         else
         {
-            // No grid underneath the sphere.
-            // Stop vertical falling.
+
 
             Rigidbody rb =
                 GetComponent<Rigidbody>();
@@ -86,7 +85,7 @@ public class MassSurfaceFollower : MonoBehaviour
                 rb.linearVelocity = velocity;
             }
 
-            // Return to the original safe height
+            
             Vector3 safePosition =
                 transform.position;
 

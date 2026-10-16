@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class IncreasePlanetMass : MonoBehaviour
 {
@@ -28,35 +29,40 @@ public class IncreasePlanetMass : MonoBehaviour
     {
         ShowCaption("Welcome, explorer! Change the planet's mass and " +
             "observe how our spacetime model responds.");
-        
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            ChangeMass(increaseAmount, increaseVoice);
-            ShowCaption("You've increased the planet's mass. Notice how the spacetime grid changes.\nIs increasing the mass alone enough to make a planet move?");
-        }
+        Keyboard kb = Keyboard.current;
+        if (kb == null) return;
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            ChangeMass(-decreaseAmount, decreaseVoice);
-            ShowCaption("You've decreased the planet's mass. Observe how the spacetime grid responds.\nWhat rule is the simulation using?");
+        if (kb.mKey.wasPressedThisFrame) IncreaseMass();
+        if (kb.nKey.wasPressedThisFrame) DecreaseMass();
 
-        }
-
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (kb.deleteKey.wasPressedThisFrame) HideCaption();
+        if (kb.iKey.wasPressedThisFrame)
         {
-            if (captionObject != null)
-                captionObject.SetActive(false);
+            if (captionObject != null) captionObject.SetActive(true);
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (captionObject != null)
-                captionObject.SetActive(true);
-        }
+    // Public so mobile UI buttons can call them from OnClick
+    public void IncreaseMass()
+    {
+        ChangeMass(increaseAmount, increaseVoice);
+        ShowCaption("You've increased the planet's mass. Notice how the spacetime grid changes.\nIs increasing the mass alone enough to make a planet move?");
+    }
+
+    public void DecreaseMass()
+    {
+        ChangeMass(-decreaseAmount, decreaseVoice);
+        ShowCaption("You've decreased the planet's mass. Observe how the spacetime grid responds.\nWhat rule is the simulation using?");
+    }
+
+    public void HideCaption()
+    {
+        if (captionObject != null)
+            captionObject.SetActive(false);
     }
 
     void ShowCaption(string message)
@@ -83,7 +89,6 @@ public class IncreasePlanetMass : MonoBehaviour
         {
             Audio.clip = voice;
             Audio.Play();
-
         }
     }
 }
