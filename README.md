@@ -111,37 +111,24 @@ Unity Mechanics Implemented
 Explain how you used:
 
 
-
-UI
-
-
-
-Scripting
+UI: I used the ui on my welcome page and for buttons like settings and guide that provide the player with information on how to play the game 
+got my ui from: https://assetstore.unity.com/
 
 
+Scripting: I created multiple scripts, some for drawing the grids, grid rings, first person camera, camera switcher ....
 
-Collision
+Collision: i created a danger zone, checked on trigger, and a particle system that shows up whenever the planet is near the sun like it's being sucked in 
 
+Raycasting: used it to check distance to planet to apply g=G*M/r^2 the closer the ray the stronger the curvature
 
-
-Raycasting
-
-
-
-Line Renderer
+Line Renderer: used it for my grid curvature and bending of the earth around the sun 
 
 
-
-Additional Features
-
-List any Unity features implemented beyond the module scope.
-
-
+Additional Features and features implemented beyond the module scope:
+Added an audio that plays whenever the player hits a certain key on the keyboard, a narrator
+created an entire grid using codes
 
 Build Information
-
-Provide:
-
 
 
 WebGL deployment link
@@ -153,4 +140,7 @@ Android build/APK link
 
 
 Instructions for running the project
+for the android build: click the .apk file inside your phone and install
+here, clone the repository then open it in unity in game scene
+
 
